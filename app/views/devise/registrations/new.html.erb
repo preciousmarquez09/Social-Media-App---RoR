@@ -1,0 +1,148 @@
+<div class="container-fluid" style="margin-top: 130px;" >
+  <div class="row d-flex justify-content-center align-items-center w-100 h-100 ">
+    <div class="card" style="width: 70%;">
+      <div class="card-body">
+          <h2 class=" text-center">Create an account</h2>
+          <p class="mb-4 text-center text-muted">Please fill out all the required fields (*)</p>
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <div class="mb-3">
+            <%= render "devise/shared/error_messages", resource: resource %>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :first_name do %>
+                First Name <span class="text-danger">*</span>
+              <% end %>
+              <%= f.text_field :first_name, autofocus: true, autocomplete: "first_name", class: "form-control", required: true %>
+            </div>
+        
+            <div class="col-md-6 mb-3">
+              <%= f.label :last_name do %>
+                Last Name <span class="text-danger">*</span>
+              <% end %>
+              <%= f.text_field :last_name, autocomplete: "last_name", class: "form-control", required: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :username do %>
+                Username <span class="text-danger">*</span>
+              <% end %>
+              <%= f.text_field :username, autofocus: true, autocomplete: "username", class: "form-control", required: true %>
+            </div>
+            <div class="col-md-6 mb-3">
+              <%= f.label :birthday do %>
+                  Birthday <span class="text-danger">*</span>
+                <% end %>
+              <%= f.date_field :birthday, autocomplete: "birthday", class: "form-control", max: Date.today.to_s, required: true %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :email do %>
+                Email <span class="text-danger">*</span>
+              <% end %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
+            </div>
+            <div class="col-md-6 mb-3">
+              <%= f.label :gender do%>
+                Gender <span class="text-danger">*</span>
+              <% end %>
+              <div class="border p-1">
+                <div class="form-check form-check-inline">
+                  <%= f.radio_button :gender, "male", class: "form-check-input" %>
+                  <%= f.label :gender_male, "Male", class: "form-check-label" %>
+                </div>
+                <div class="form-check form-check-inline">
+                  <%= f.radio_button :gender, "female", class: "form-check-input" %>
+                  <%= f.label :gender_female, "Female", class: "form-check-label" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :password do %>
+                Password
+                <% if @minimum_password_length %>
+                  (<%= @minimum_password_length %> characters minimum)
+                <% end %>
+                <span class="text-danger">*</span>
+              <% end %>
+              
+              <div class="input-group">
+                <%= f.password_field :password, id: 'password_field', class: "form-control" %>
+                <div class="input-group-append">
+                  <span id="toggle_password" class="input-group-text" style="cursor: pointer;">
+                    <i id="eye_icon" class="fa fa-eye-slash" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <%= f.label :password_confirmation do %>
+                Password confirmation <span class="text-danger">*</span>
+              <% end %>
+              
+              <div class="input-group">
+                <%= f.password_field :password_confirmation, id: 'password_confirmation_field', autocomplete: "new-password", class: "form-control" %>
+                <div class="input-group-append">
+                  <span id="toggle_password_confirmation" class="input-group-text" style="cursor: pointer;">
+                    <i id="eye_icon_confirmation" class="fa fa-eye-slash" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="actions">
+            <%= f.submit "Sign up", class: "btn btn-dark btn-lg btn-block ", style: "width: 130px;"  %>
+          </div>
+        <% end %>
+        <br>
+        <%= render "devise/shared/links" %>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Password field toggle
+  const eyeIcon = document.getElementById("eye_icon");
+  const passwordField = document.getElementById("password_field");
+
+  eyeIcon.addEventListener("click", function() {
+    // Toggle password visibility
+    if (passwordField.type === "password") {
+      passwordField.type = "text"; // Show password
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
+    } else {
+      passwordField.type = "password"; // Hide password
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
+    }
+  });
+
+  // Password confirmation field toggle
+  const eyeIconConfirmation = document.getElementById("eye_icon_confirmation");
+  const passwordConfirmationField = document.getElementById("password_confirmation_field");
+
+  eyeIconConfirmation.addEventListener("click", function() {
+    // Toggle password confirmation visibility
+    if (passwordConfirmationField.type === "password") {
+      passwordConfirmationField.type = "text"; // Show password confirmation
+      eyeIconConfirmation.classList.remove("fa-eye-slash");
+      eyeIconConfirmation.classList.add("fa-eye");
+    } else {
+      passwordConfirmationField.type = "password"; // Hide password confirmation
+      eyeIconConfirmation.classList.remove("fa-eye");
+      eyeIconConfirmation.classList.add("fa-eye-slash");
+    }
+  });
+});
+</script>

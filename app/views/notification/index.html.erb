@@ -1,0 +1,50 @@
+<div class="container" style="max-width: 1200px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="mb-3">Your Notifications</h4>
+
+      <% if @grouped_notifications.any? %>
+        <% @grouped_notifications.each do |date, notifications| %>
+          <h5 class="mt-4"><%= date == Date.today ? "Today" : date.strftime("%B %d, %Y") %></h5> <!-- Display the date -->
+          <ul class="list-unstyled">
+            <% notifications.each do |notification| %>
+              <% post_notification = notification.to_notification %>
+              <% bgColor = notification.read? ? 'white' : '#ebedf0' %>
+              <%= link_to read_and_redirect_notification_path(notification), style: "color: black; text-decoration: none; background-color: #{bgColor}; display: block;" do %>
+                <li class="d-flex align-items-center mb-3 p-2 border-bottom <%= 'unread' if !notification.read? %> notification-item">
+                  <div class="me-3">
+                    <% user = notification.user %>
+                    <% if user.avatar.attached? %>
+                      <img src="<%= url_for(user.avatar) %>" alt="Profile Picture" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                    <% else %>
+                      <img src="/assets/avatar/default_avatar.png" alt="Default Avatar" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                    <% end %>
+                  </div>
+                  <div class="flex-grow-1">
+                  <div class="notification-item">
+                      <p class="mb-0 ms-2"> <%= post_notification.message %></p>
+                      <% if notification.created_at > 24.hours.ago %>
+                        <span class="small text-muted ms-2"><%= time_ago_in_words(notification.created_at) %> ago</span>
+                      <% else %>
+                        <span class="small text-muted ms-2"><%= notification.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+                      <% end %>
+                  </div>
+                  </div>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        <% end %>
+      <% else %>
+        <p>You have no notifications.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br>
+<div class="d-flex justify-content-center">
+  <% if @pagy.pages > 1 %>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  <% end %>
+</div>

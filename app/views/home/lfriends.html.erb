@@ -1,0 +1,49 @@
+<div class="container" style="max-width: 1200px;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="mb-3">Friends</h4>
+
+      <% if @list_friends.any? %>
+      <% @list_friends.each do |friend| %>
+        <div class="d-flex align-items-center mb-3 p-2 border-bottom">
+          <div class="me-3">
+            <% if friend.avatar.attached? %>
+              <img src="<%= url_for(friend.avatar) %>" alt="Profile Picture" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+            <% else %>
+              <img src="/assets/avatar/default_avatar.png" alt="Default Avatar" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+            <% end %>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="mb-1">
+              <%= link_to "#{friend.first_name} #{friend.last_name}", home_path(friend.id), class: 'me-3', style: 'color: black; text-decoration: none;' %>
+            </h6>
+            <small class="text-muted"><%= friend.email %></small>
+          </div>
+          <div class="ms-auto">
+            <% if current_user.id == @user.id %>
+              <!-- if the current user is in their list of friend (follow_type = friend) they can unfriend -->
+              <% relationship = Followability::Relationship.find_by(followerable: current_user, followable: friend.id) %>
+              <% if relationship&.follow_type == "friend" %>
+                  <%= button_to "Unfriend", unfollow_path(friend.id), class: "btn btn-danger btn-sm" %>
+              <% else %>
+                  <%= button_to "Unfriend", unfollow_path(@user), class: "btn btn-danger btn-sm" %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% else %>
+        <p>You have no friends.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="d-flex justify-content-center">
+    <% if @pagy.pages > 1 %>
+        <%== pagy_bootstrap_nav(@pagy) %>
+    <% end %>
+</div>
+

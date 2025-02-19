@@ -1,0 +1,86 @@
+<style>
+.form-floating {
+  position: relative;
+}
+
+#toggle-password {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+#toggle-password i {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+</style>
+<div class="container-fluid p-0" style="height: 80vh;">
+  <div class="row d-flex justify-content-center align-items-center w-100 h-100">
+    <div class="col col-xl-10">
+      <div class="card" style="border-radius: 1rem;">
+        <div class="row g-0">
+          <div class="col-md-6 col-lg-5 d-none d-md-block">
+            <img src="/assets/login/social_media.jpg" alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem; height: 100%; object-fit: cover;" />
+          </div>
+          <div class="col-md-6 col-lg-7 d-flex align-items-center">
+            <div class="card-body p-4 p-lg-5 text-black">
+
+              <h5 class="mb-3 pb-3" style="letter-spacing: 1px;">Log into your account</h5>
+
+              <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                <div class="form-floating mb-4">
+                  <%= f.text_field :login, class: "form-control form-control-lg", placeholder: "Email / Username", required: true  %>
+                  <%= f.label :login, "Email / Username", class: "form-label" %>
+                </div>
+
+                <div class="form-floating mb-4">
+                  <%= f.password_field :password, id: "password-field", autocomplete: "current-password", class: "form-control form-control-lg", placeholder: "Password", required: true %>
+                  <label for="password-field" class="form-label">Password</label>
+                  <span class="input-group-append" id="toggle-password">
+                    <i class="fa fa-eye" id="eye-icon"></i>
+                  </span>
+                </div>
+
+
+                <% if devise_mapping.rememberable? %>
+                  <div class="field">
+                    <%= f.check_box :remember_me, class: "form-check-input" %>
+                    <%= f.label :remember_me %>
+                  </div>
+                <% end %>
+
+                <div class="pt-1 mb-3 mt-2">
+                  <%= f.submit "Log in", class: "btn btn-dark btn-lg btn-block form-control" %>
+                </div>
+              <% end %>
+              
+              <%= render "devise/shared/links" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const eyeIcon = document.getElementById("eye-icon");
+  const passwordField = document.getElementById("password-field");
+
+  eyeIcon.addEventListener("click", function() {
+    // Toggle password visibility
+    if (passwordField.type === "password") {
+      passwordField.type = "text"; // Show password
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
+    } else {
+      passwordField.type = "password"; // Hide password
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
+    }
+  });
+});
+
+</script>

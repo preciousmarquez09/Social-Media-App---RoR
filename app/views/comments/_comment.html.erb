@@ -1,0 +1,40 @@
+<% if comment.persisted? %> 
+  <div class="d-flex mt-3">
+    <div class="flex-grow-1 p-2" style="background-color: #f5f6f7; border-radius: 8px;">
+      <div class="d-flex align-items-center mb-2">
+        <div class="d-flex flex-column align-items-center me-3">
+          <%= link_to home_path(comment.user.id) do %>
+            <% if comment.user && comment.user.avatar.attached? %>
+              <img id="profile_picture_preview" src="<%= url_for(comment.user.avatar) %>" 
+                   alt="Image Preview" class="rounded-circle shadow-1-strong" width="50" height="50" />
+            <% else %>
+              <img id="profile_picture_preview" src="/assets/avatar/default_avatar.png" 
+                   alt="Default Avatar" class="rounded-circle shadow-1-strong" width="50" height="50" />
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="mb-0" style="font-weight: bold; ">
+              <% if comment.user %>
+                <%= link_to "#{comment.user.first_name} #{comment.user.last_name}", home_path(comment.user.id), class: 'text-dark text-decoration-none' %>
+              <% end %>
+            </p>
+            <% if user_signed_in? && (current_user.id == comment.user_id || current_user.admin?) %>
+              <%= link_to "Delete", [comment.post, comment], method: :delete, class: "btn btn-danger btn-sm me-1 mt-1", onClick: "return confirm('Are you sure you want to delete this comment?');" %>
+            <% end %>
+          </div>
+          <p class=" mb-1 text-muted"><%= comment.body %></p>
+          <div class="d-flex justify-content-between">
+            <% if comment.created_at > 24.hours.ago %>
+              <span class="small text-muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
+            <% else %>
+              <span class="small text-muted"><%= comment.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

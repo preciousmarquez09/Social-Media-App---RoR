@@ -1,0 +1,21 @@
+<%= form_with model: [@post, @post.comments.build], class: "d-flex flex-column mt-4" do |form| %>
+    <div class="d-flex align-items-center">
+      <!-- Profile Picture -->
+      <a class="me-3" href="#">
+        <% if current_user.avatar.attached? %>
+          <img id="profile_picture_preview" src="<%= url_for(current_user.avatar) %>" 
+               alt="Image Preview" class="rounded-circle shadow-1-strong" width="50" height="50" />
+        <% else %>
+          <img id="profile_picture_preview" src="/assets/avatar/default_avatar.png" 
+               alt="Default Avatar" class="rounded-circle shadow-1-strong" width="50" height="50" />
+        <% end %>
+      </a>
+  
+      <!-- Input and Submit Button -->
+      <div class="d-flex flex-grow-1">
+        <%= form.text_area :body, class: "form-control form-control-sm me-2", placeholder: "Write a comment..." %>
+        <%= form.submit "Comment", class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  <% end %>
+  

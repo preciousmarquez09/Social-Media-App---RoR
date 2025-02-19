@@ -1,0 +1,73 @@
+<% @user_post.each do |post| %>
+    <!-- Render each post content -->
+    <div class="container mt-4" style="max-width: 1000px; width: 100%;">
+      <div class="card">
+        <div class="card-body">
+          <!-- User Info and Post Content -->
+          <div class="d-flex align-items-center mb-2">
+            <%= link_to home_path(post.user.id), class: "text-decoration-none d-flex align-items-center" do %>
+              <% if post.user.avatar.attached? %>
+                <img id="profile_picture_preview" src="<%= url_for(post.user.avatar) %>" alt="Image Preview" class="rounded-circle img-fluid" style="max-width: 50px; max-height: 50px;" />
+              <% else %>
+                <img id="profile_picture_preview" src="/assets/avatar/default_avatar.png" alt="Default Avatar" class="rounded-circle img-fluid" style="max-width: 50px; max-height: 50px;" />
+              <% end %>
+            <div class="time-item">
+                <h5 class="mb-0 ms-2 " style="color:black"><%= post.user.first_name %> <%= post.user.last_name %></h5>
+                <% if post.created_at > 24.hours.ago %>
+                  <span class="small text-muted ms-2"><%= time_ago_in_words(post.created_at) %> ago</span>
+                <% else %>
+                  <span class="small text-muted ms-2"><%= post.created_at.strftime("%B %d, %Y at %I:%M %p") %></span>
+                <% end %>
+            </div>
+            <% end %>
+          </div>
+          <p><%= post.body %></p>
+  
+          <!-- Media preview section -->
+          <% if post.media.attached? %>
+            <div class="media-preview-box mb-2" style="padding: 10px; width: 300px; height: 300px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+              <div class="photos-preview-box" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <% if post.media.content_type.starts_with?('video') %>
+                  <div style="position: relative; width: 300px; height: 300px;">
+                    <video controls style="width: 100%; height: 100%; object-fit: contain;">
+                      <source src="<%= url_for(post.media) %>" type="<%= post.media.content_type %>">
+                    </video>
+                  </div>
+                <% elsif post.media.content_type.starts_with?('image') %>
+                  <div style="position: relative; width: 300px; height: 300px;">
+                    <%= image_tag url_for(post.media), style: "width: 100%; height: 100%; object-fit: contain;" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+  
+          <!-- Like button and actions -->
+          <div class="d-flex justify-content-between">
+            <% like = current_user.likes.find_by(post: post) %>
+            <% if like.nil? %>
+              <%= button_to likes_path(like: { post_id: post.id }), method: :post, class: "btn btn-outline-dark" do %>
+                <i class="fa fa-thumbs-o-up" aria-hidden="true" style="margin-right: 5px;"></i>Like
+              <% end %>
+            <% else %>
+              <%= button_to destroy_likes_path(like), method: :post, class: "btn btn-dark" do %>
+                <i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 5px;"></i>Liked
+              <% end %>
+            <% end %>
+            
+            <%= link_to "Show", post, class: "btn btn-outline-dark" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <br>
+  
+  <!-- Pagination Controls -->
+  <div class="d-flex justify-content-center">
+    <% if @pagy.pages > 1 %>
+      <%== pagy_bootstrap_nav(@pagy) %>
+    <% end %>
+  </div>
+  

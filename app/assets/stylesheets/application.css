@@ -13,3 +13,167 @@
  *= require_tree .
  *= require_self
  */
+ .input-group {
+  display: flex; 
+  align-items: center; 
+}
+
+.input-group .form-control {
+  flex: 1; 
+  padding-right: 40px; 
+}
+
+.input-group .input-group-text {
+  border: none;
+  background: rgb(221, 220, 220); 
+  cursor: pointer;
+  z-index: 10; 
+  padding: 0.68rem 0.75rem; 
+  border-radius: 0px;
+}
+
+.input-group .input-group-text i {
+  margin: 0; /* Remove margin from icon */
+}
+
+ /* Notification Badge & hover*/
+ .custom-badge {
+    background-color: red; 
+    color: white;             
+  }
+  .notification-item:hover {
+    background-color: #f8f9fa; 
+    cursor: pointer; 
+  }
+
+/* Navbar */
+  .nav-item {
+    display: inline-block; 
+  }
+.nav-item .active {
+  color: black; 
+  margin: 0;/
+}
+
+.nav-item a {
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none; 
+}
+
+/* create post input */
+
+.input-box {
+  flex-grow: 1;
+  border-radius: 20px;
+  border: none;
+  background-color: #e4e6e9;
+  color: #6e7174;
+  font-size: 16px;
+  outline: none;
+  width: 98%;
+  margin-left: 10px;
+  max-width: 98%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* search bar */
+/* Search Wrapper */
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Default Search Button (🔍 Icon Only) */
+.searchButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #6e7174;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.searchButton:hover {
+  background: #5a5d60;
+}
+
+/* Search Box - Initially Hidden */
+.search-box {
+  display: flex;
+  align-items: center;
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
+  border: 2px solid #6e7174;
+  border-radius: 20px;
+  background: white;
+  position: absolute;
+  left: 0;
+}
+
+/* Expand Search Box When Focused */
+.search-container:focus-within .search-box {
+  width: 250px;
+  opacity: 1;
+  padding: 5px;
+}
+
+/* Search Input */
+.searchTerm {
+  flex: 1;
+  padding: 5px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Make Input Visible When Focused */
+.search-container:focus-within .searchTerm {
+  opacity: 1;
+}
+
+/* Submit Button */
+.searchSubmit {
+  width: 40px;
+  height: 36px;
+  border: none;
+  background: #6e7174;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* background color of hover in menu show post */
+.dropdown button:hover span,
+.dropdown button:focus span,
+.dropdown button:active span {
+  padding: 8px 10px;
+  background-color: #dfdfdf; 
+  border-radius: 30%; 
+}
+
+

@@ -1,0 +1,127 @@
+ <div class="container py-2 h-100">
+    <div class="row d-flex justify-content-center">
+    <div class="col-12">
+        <div class="card">
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                <% if @user.avatar.attached? %>
+                    <img id="profile_picture_preview" src="<%= url_for(@user.avatar) %>" alt="Image Preview" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1;" />
+                <% else %>
+                    <img id="profile_picture_preview" src="/assets/avatar/default_avatar.png" alt="Default Avatar" class="img-fluid img-thumbnail mt-4 mb-2" style="width: 150px; z-index: 1;" />
+                <% end %>
+            </div>
+            
+            <div class="ms-3" style="margin-top: 130px;">
+              <h5><%= @user.first_name %> <%= @user.last_name %></h5>
+              <p><%= @user.username %></p>
+            </div>
+          </div>
+
+         <div class="p-4 text-black bg-body-tertiary">
+          <div class="d-flex justify-content-between align-items-center text-body">
+            <div class="d-flex gap-2">
+                <% relationship = Followability::Relationship.find_by(followerable: current_user, followable: @user) %>
+
+                <!-- if the current user is in their profile -->
+                <% if current_user.id == @user.id %>
+                  <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-dark mt-2" %>
+                <% else %> <!-- if the current user is in their stalk or view someones profile -->
+                  <% if relationship&.follow_type == "friend" %>
+                    <%= button_to "Unfriend", unfollow_path(@user), class: "btn btn-danger btn-sm" %>
+
+                  <% elsif current_user.sent_follow_request_to?(@user) %>
+                    <%= button_to "Cancel Request", cancel_path(@user), class: "btn btn-warning btn-sm" %>
+
+                  <% elsif @user.sent_follow_request_to?(current_user) %>
+                    <%= button_to "Accept Friend Request", accept_path(@user), class: "btn btn-success btn-sm" %>
+                    <%= button_to "Decline", decline_path(@user), class: "btn btn-danger btn-sm" %>
+
+                  <% else %>
+                    <%= button_to  friend_request_path(@user), class: "btn btn-primary btn-sm" do %>
+                      <i class="fa fa-user-plus" aria-hidden="true"></i> Send Friend Request
+                    <% end %>
+                  <% end %>
+
+                  <% unless relationship&.follow_type == "friend" || current_user.sent_follow_request_to?(@user) || @user.sent_follow_request_to?(current_user) %>
+                    <% if current_user.following?(@user) %>
+                      <%= button_to "Unfollow", unfollow_path(@user), class: "btn btn-danger btn-sm" %>
+                    <% else %>
+                      <%= button_to "Follow", follow_path(@user), class: "btn btn-primary btn-sm" %>
+                    <% end %>
+                  <% end %>
+              <% end %>
+            </div>
+
+          <div class="row text-center">
+            <div class="col">
+              <p class="mb-1 h5"><%= @user.posts.count %></p>
+              <p class="small text-muted mb-0">Posts</p>
+            </div>
+
+            <div class="col">
+              <%= link_to lfollowers_path, class: "text-decoration-none" do %>
+                <p class="mb-1 h5"><%= @user.followers.count %></p>
+                <p class="small text-muted mb-0">Followers</p>
+              <% end %>
+            </div>
+
+            <div class="col">
+              <%= link_to lfollowing_path, class: "text-decoration-none" do %>
+                <p class="mb-1 h5"><%= @user.following.count %></p>
+                <p class="small text-muted mb-0">Following</p>
+              <% end %>
+            </div>
+
+            <div class="col">
+              <% friends = Followability::Relationship.where(followerable: @user, follow_type: "friend").pluck(:followable_id) %>
+              <%= link_to lfriends_path, class: "text-decoration-none" do %>
+                <p class="mb-1 h5"><%= friends.count %></p>
+                <p class="small text-muted mb-0">Friends</p>
+              <% end %>
+            </div>
+          </div>
+          </div>
+        </div>
+
+          <% if @user.following?(current_user) %>
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+              <%= link_to "#{@user.first_name} #{@user.last_name}", home_path(@user), class: "fw-bold text-decoration-none" %>&nbsp;is following you
+            </div>
+          <% end %>
+          
+          <div class="card-body p-4 text-black">
+            <div class="mb-3  text-body">
+              <p class="lead fw-normal mb-1">About</p>
+              <div class="p-4 bg-body-tertiary">
+                <p class="font-italic mb-1">Bio: <%= @user.bio %></p>
+                <p class="font-italic mb-1">Birthday: <%= @user.birthday.strftime("%B %d, %Y") %></p>
+              </div>
+            </div>
+              <% if current_user.id == @user.id %>
+                <div class="d-flex justify-content-center align-items-center">
+                  <div class="card" style="width: 100%; max-width: 980px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-2">
+                        <%= link_to home_path(current_user.id), class: "text-decoration-none d-flex align-items-center" do %>
+                          <% if current_user.avatar.attached? %>
+                            <img id="profile_picture_preview" src="<%= url_for(current_user.avatar) %>" alt="Image Preview" class="rounded-circle img-fluid" style="max-width: 50px; max-height: 50px;" />
+                          <% else %>
+                            <img id="profile_picture_preview" src="/assets/avatar/default_avatar.png" alt="Default Avatar" class="rounded-circle img-fluid" style="max-width: 50px; max-height: 50px;" />
+                          <% end %>
+                        <% end %>
+                        <%= link_to new_post_path, class: "w-100" do %>
+                          <input type="text" class="input-box" placeholder="What's on your mind, <%= current_user.first_name %>?">
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <div>
+                <%= render "userPost", post: @user_post %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
