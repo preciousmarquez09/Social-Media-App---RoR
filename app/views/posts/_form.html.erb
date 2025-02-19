@@ -61,6 +61,8 @@
 
 </div>
 <script>
+let existingMediaHtml = ""; // Store existing media preview HTML
+
 function previewMedia(event) {
   const files = event.target.files;
   const previewContainer = document.querySelector('.photos-preview-box');
@@ -68,16 +70,21 @@ function previewMedia(event) {
   const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
   const file = files[0];
 
+  if (!existingMediaHtml) {
+    existingMediaHtml = previewContainer.innerHTML; // Save original media preview
+  }
+
   if (!file) return; // Exit if no file is selected
 
   if (!allowedTypes.includes(file.type)) {
     alert('Invalid file type. Please upload a JPG, PNG, or MP4 file.');
-    event.target.value = ''; // Clear the input field
-    return; // Do not remove existing media preview
+    event.target.value = ''; // Clear input field
+    previewContainer.innerHTML = existingMediaHtml; // Restore previous media preview
+    return;
   }
 
-  // Clear only if a valid new file is uploaded
-  previewContainer.innerHTML = '';
+  // If valid file, update preview
+  previewContainer.innerHTML = ''; // Clear previous preview
   removeButton.style.display = 'block'; // Show remove button
 
   const reader = new FileReader();
@@ -117,22 +124,25 @@ function removeMedia() {
   const removeButton = document.getElementById('remove_media_btn');
   const removeMediaField = document.getElementById('remove_media');
 
-  mediaInput.value = ''; // Clear the file input
-  previewContainer.innerHTML = ''; // Remove the preview
-  removeButton.style.display = 'none'; // Hide the remove button
-  removeMediaField.value = "true";
+  mediaInput.value = ''; // Clear file input
+  previewContainer.innerHTML = ''; // Clear media preview
+  existingMediaHtml = ''; // Reset stored media preview
+  removeButton.style.display = 'none'; // Hide remove button
+  removeMediaField.value = "true"; // Set hidden field to true to indicate media should be removed
 }
 
-window.onload = function() {
-  const mediaInput = document.getElementById('media_input');
-  const removeButton = document.getElementById('remove_media_btn');
-  const previewContainer = document.querySelector('.photos-preview-box');
 
-  if (previewContainer && previewContainer.children.length > 0) {
-    removeButton.style.display = 'block'; // Show remove button if media exists
+window.onload = function() {
+  const previewContainer = document.querySelector('.photos-preview-box');
+  const removeButton = document.getElementById('remove_media_btn');
+
+  if (previewContainer.children.length > 0) {
+    existingMediaHtml = previewContainer.innerHTML; // Store initial preview
+    removeButton.style.display = 'block'; // Show remove button
   } else {
-    removeButton.style.display = 'none'; // Hide remove button if no media
+    removeButton.style.display = 'none'; // Hide remove button
   }
 };
+
 
 </script>

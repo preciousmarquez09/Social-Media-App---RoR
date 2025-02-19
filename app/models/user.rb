@@ -21,9 +21,12 @@ class User < ApplicationRecord
 
   before_create :set_admin_if_first_user
   validates :birthday, :gender, presence: true 
-  validates :first_name, presence: true, length: { minimum: 2 }, if: -> { first_name.present? }
-  validates :last_name, presence: true, length: { minimum: 2 }, if: -> { last_name.present? }
-  validates :username, presence: true, length: { minimum: 2 }, if: -> { username.present? }
+  validates :first_name, presence: true, length: { minimum: 2 }, if: -> { first_name.present? }, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
+  validates :last_name, presence: true, length: { minimum: 2 }, if: -> { last_name.present? }, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
+
+  validates :username, presence: true, length: { minimum: 2 }, if: -> { username.present? }, 
+                     format: { with: /\A[a-zA-Z0-9@._#]+\z/, message: "only allows letters, numbers, and @ . _ #" }
+
 
   validates :bio, length: { maximum: 100, too_long: "%{count} characters is the maximum allowed" }
   validate :age_is_16_above
