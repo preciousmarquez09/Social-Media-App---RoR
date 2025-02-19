@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_02_18_081711) do
+ActiveRecord::Schema.define(version: 2025_02_19_032924) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -75,7 +75,11 @@ ActiveRecord::Schema.define(version: 2025_02_18_081711) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "type"
     t.bigint "comment_id"
+    t.bigint "follow_id"
+    t.bigint "followability_relationships_id"
     t.index ["comment_id"], name: "index_notifications_on_comment_id"
+    t.index ["follow_id"], name: "index_notifications_on_follow_id"
+    t.index ["followability_relationships_id"], name: "index_notifications_on_followability_relationships_id"
     t.index ["post_id"], name: "index_notifications_on_post_id"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient_type_and_recipient_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
@@ -115,6 +119,7 @@ ActiveRecord::Schema.define(version: 2025_02_18_081711) do
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
   add_foreign_key "notifications", "comments"
+  add_foreign_key "notifications", "followability_relationships", column: "followability_relationships_id"
   add_foreign_key "notifications", "posts"
   add_foreign_key "notifications", "users", on_delete: :cascade
   add_foreign_key "posts", "users"

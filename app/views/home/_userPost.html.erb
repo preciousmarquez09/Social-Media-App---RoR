@@ -43,20 +43,25 @@
           <% end %>
   
           <!-- Like button and actions -->
-          <div class="d-flex justify-content-between">
-            <% like = current_user.likes.find_by(post: post) %>
-            <% if like.nil? %>
-              <%= button_to likes_path(like: { post_id: post.id }), method: :post, class: "btn btn-outline-dark" do %>
-                <i class="fa fa-thumbs-o-up" aria-hidden="true" style="margin-right: 5px;"></i>Like
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <% like = current_user.likes.find_by(post: post) %>
+              <% if like.nil? %>
+                <%= button_to likes_path(like: { post_id: post.id }), method: :post, class: "btn btn-outline-dark me-2" do %>
+                  <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Like
+                <% end %>
+              <% else %>
+                <%= button_to destroy_likes_path(like), method: :post, class: "btn btn-dark me-2" do %>
+                  <i class="fa fa-thumbs-up" aria-hidden="true"></i> Liked
+                <% end %>
               <% end %>
-            <% else %>
-              <%= button_to destroy_likes_path(like), method: :post, class: "btn btn-dark" do %>
-                <i class="fa fa-thumbs-up" aria-hidden="true" style="margin-right: 5px;"></i>Liked
-              <% end %>
-            <% end %>
-            
+
+              <p class="mb-0"><%= post.likes.count %> likes</p>
+            </div>
+
             <%= link_to "Show", post, class: "btn btn-outline-dark" %>
           </div>
+
         </div>
       </div>
     </div>

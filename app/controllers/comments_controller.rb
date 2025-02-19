@@ -23,11 +23,6 @@ class CommentsController < ApplicationController
       @post = Post.find(params[:post_id])
       @comment = @post.comments.find(params[:id])
 
-      # i commented the notification since i dont have any solution yet to delete the specific comment
-      #notification = Notification.where(post: @post.id, user: current_user.id, action: 'comment').first
-      #if notification
-        #notification.destroy
-      #end
       
         @comment.destroy
         redirect_to post_path(@post), notice: "Comment deleted successfully."

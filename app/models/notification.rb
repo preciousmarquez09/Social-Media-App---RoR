@@ -25,7 +25,8 @@ class Notification < ApplicationRecord
       user_id: params[:user_id],
       post_id: params[:post_id],
       action: params[:action],
-      comment_id: params[:action] == 'comment' ? params[:comment_id] : nil
+      comment_id: params[:action] == 'comment' ? params[:comment_id] : nil,
+      follow_id: params[:action] == 'follow' || 'friend_req' || 'accept_req' ? params[:follow_id] : nil
     )
   end
   

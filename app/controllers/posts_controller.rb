@@ -25,15 +25,15 @@ class PostsController < ApplicationController
       @pagy, @posts = pagy(@q.result(distinct: true))
     elsif current_user.admin?
       # If the user is an admin, fetch all posts
-      @pagy, @posts = pagy(Post.includes(:user, :comments).order(created_at: :desc))
+      @pagy, @posts = pagy(Post.includes(:user, :comments, :likes).order(created_at: :desc))
     else
       # Fetch posts of users following
-      @pagy, @posts = pagy(Post.includes(:user, :comments).where(user: current_user.following).order(created_at: :desc))
+      @pagy, @posts = pagy(Post.includes(:user, :comments, :likes).where(user: current_user.following).order(created_at: :desc))
     end
   end
 
   def show
-    @post = Post.includes(:user, :comments).find(params[:id])
+    @post = Post.includes(:user, :comments, :likes).find(params[:id])
   end
 
   def new

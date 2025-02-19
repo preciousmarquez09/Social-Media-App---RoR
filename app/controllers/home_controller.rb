@@ -40,6 +40,7 @@ class HomeController < ApplicationController
   #follow the user
   def follow
     follow_user
+    PostNotification.with(user_id: current_user.id, follow_id: @user.id, action: 'follow').deliver_later(@user)
     redirect_to home_path(@user)
   end
 
@@ -64,6 +65,7 @@ class HomeController < ApplicationController
     current_user.unfollow(@user) if current_user.following?(@user)
       
     current_user.send_follow_request_to(@user)
+    PostNotification.with(user_id: current_user.id, follow_id: @user.id, action: 'friend_req').deliver_later(@user)
     redirect_to home_path(@user)
   end
 
@@ -80,7 +82,7 @@ class HomeController < ApplicationController
     current_user.accept_follow_request_of(@user)
 
     update_follow_type_to_friend(current_user, @user)
-  
+    PostNotification.with(user_id: current_user.id, follow_id: @user.id, action: 'accept_req').deliver_later(@user)
     redirect_to posts_path
   end
   

@@ -12,9 +12,12 @@ class NotificationController < ApplicationController
   def read_and_redirect
     notification = current_user.notifications.find(params[:id])
     notification.mark_as_read! # Mark the notification as read
-
-    # Redirect to the post's show page
-    redirect_to post_path(notification.params[:post_id])
+    if notification.action == 'like' || notification.action == 'comment'
+      # Redirect to the post's show page
+      redirect_to post_path(notification.params[:post_id])
+    else
+      redirect_to home_path(notification.params[:user_id])
+    end
   end
   
   
