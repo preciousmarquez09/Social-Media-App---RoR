@@ -98,7 +98,7 @@
           </div>
         
           <div class="actions">
-            <%= f.submit "Sign upss", class: "btn btn-dark btn-lg btn-block ", style: "width: 130px;"  %>
+            <%= f.submit "Sign up", class: "btn btn-dark btn-lg btn-block ", style: "width: 130px;"  %>
           </div>
         <% end %>
         <br>
@@ -111,12 +111,12 @@
 <br>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // Password field toggles
+  // Password field toggle
   const eyeIcon = document.getElementById("eye_icon");
   const passwordField = document.getElementById("password_field");
 
   eyeIcon.addEventListener("click", function() {
-    // Toggle password visibilitys
+    // Toggle password visibility
     if (passwordField.type === "password") {
       passwordField.type = "text"; // Show password
       eyeIcon.classList.remove("fa-eye-slash");
